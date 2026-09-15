@@ -14,6 +14,7 @@ BLOCKED_IPS = [
     "169.254.0.0/16",  # Cloud metadata IP (usually for AWS, GCP, etc.)
     "100.100.100.200",  # Alibaba Cloud metadata IP
     "127.0.0.0/8",  # Loopback addresses (localhost)
+    "::1",  # IPv6 loopback address
     "0.0.0.0/8",  # This is a reserved IP range
     "224.0.0.0/4",  # Multicast addresses
     "240.0.0.0/4",  # Reserved addresses
