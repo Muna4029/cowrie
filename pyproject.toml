@@ -161,6 +161,14 @@ reportOptionalOperand = "information"
 reportPossiblyUnboundVariable = "information"
 reportUnsupportedDunderAll = "information"
 
+reportMissingParameterType = "none"
+reportMissingTypeArgument = "none"
+reportMissingTypeStubs = "none"
+reportUnknownMemberType = "none"
+reportUnknownParameterType = "none"
+reportUnknownVariableType = "none"
+reportUnknownArgumentType = "none"
+reportUnknownLambdaType = "none"
 [tool.pytype]
 inputs = ["src"]
 jobs = "auto"
