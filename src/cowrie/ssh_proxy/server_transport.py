@@ -38,6 +38,7 @@ from hashlib import md5
 from twisted.conch.ssh import transport
 from twisted.conch.ssh.common import getNS
 from twisted.internet import reactor
+from twisted.internet.protocol import connectionDone
 from twisted.internet.endpoints import TCP4ClientEndpoint
 from twisted.protocols.policies import TimeoutMixin
 from twisted.python import failure, log, randbytes
@@ -349,7 +350,7 @@ class FrontendSSHTransport(transport.SSHServerTransport, TimeoutMixin):
 
         transport.SSHServerTransport.setService(self, service)
 
-    def connectionLost(self, reason):
+    def connectionLost(self, reason: failure.Failure | None = connectionDone) -> None:
         """
         This seems to be the only reliable place of catching lost connection
         """

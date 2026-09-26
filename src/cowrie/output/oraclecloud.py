@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import datetime
 import json
 import secrets
@@ -14,6 +16,12 @@ from cowrie.core.config import CowrieConfig
 
 
 class Output(cowrie.core.output.Output):
+    debug: bool
+    agent: Any
+    db: Any
+    log_ocid: str
+    hostname: str
+    loggingingestion_client: Any
     """
     Oracle Cloud output
     """

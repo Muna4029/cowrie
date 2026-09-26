@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Callable
+
 from backend_pool.ssh_exec import execute_ssh
 from backend_pool.telnet_exec import execute_telnet
 
@@ -14,18 +16,18 @@ class ProxyTestCommand:
 
     def __init__(
         self,
-        connection_type,
-        hostname,
-        port_backend,
-        port_proxy,
-        username_backend,
-        password_backend,
-        username_proxy,
-        password_proxy,
-    ):
+        connection_type: str,
+        hostname: str,
+        port_backend: int,
+        port_proxy: int,
+        username_backend: str,
+        password_backend: str,
+        username_proxy: str,
+        password_proxy: str,
+    ) -> None:
         self.deferred = defer.Deferred()
-        self.backend_data = None
-        self.proxy_data = None
+        self.backend_data: bytes | None = None
+        self.proxy_data: bytes | None = None
 
         self.hostname = hostname
         self.port_backend = port_backend
@@ -39,8 +41,8 @@ class ProxyTestCommand:
         # whether to execute the command via SSH or Telnet
         self.execute = execute_ssh if connection_type == "ssh" else execute_telnet
 
-    def execute_both(self, command):
-        def callback_backend(data):
+    def execute_both(self, command: bytes | str) -> None:
+        def callback_backend(data: bytes) -> None:
             # if we haven't received data from the proxy just store the output
             if not self.proxy_data:
                 self.backend_data = data
@@ -51,7 +53,7 @@ class ProxyTestCommand:
                 else:
                     self.deferred.errback(ValueError())
 
-        def callback_proxy(data):
+        def callback_proxy(data: bytes) -> None:
             # if we haven't received data from the backend just store the output
             if not self.backend_data:
                 self.proxy_data = data
@@ -82,8 +84,10 @@ class ProxyTestCommand:
             callback_proxy,
         )
 
-    def execute_one(self, is_proxy, command, deferred):
-        def callback(data):
+    def execute_one(
+        self, is_proxy: bool, command: bytes | str, deferred: defer.Deferred
+    ) -> None:
+        def callback(data: bytes) -> None:
             deferred.callback(data)
 
         if is_proxy:

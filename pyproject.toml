@@ -159,6 +159,8 @@ reportOptionalCall = "information"
 reportOptionalMemberAccess = "none"
 reportOptionalOperand = "information"
 reportPossiblyUnboundVariable = "information"
+reportUnknownMemberType = "none"
+reportUnknownVariableType = "none"
 reportUnsupportedDunderAll = "information"
 
 [tool.pytype]

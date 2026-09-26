@@ -10,7 +10,7 @@ import socket
 import sys
 import time
 import traceback
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from twisted.conch import recvline
 from twisted.conch.insults import insults
@@ -47,26 +47,26 @@ class HoneyPotBaseProtocol(insults.TerminalProtocol, TimeoutMixin):
             )
 
     def __init__(self, avatar):
-        self.user = avatar
-        self.environ = avatar.environ
+        self.user: Any = avatar
+        self.environ: dict[str, str] = avatar.environ
         self.hostname: str = self.user.server.hostname
-        self.fs = self.user.server.fs
-        self.pp = None
+        self.fs: "HoneyPotFilesystem" = self.user.server.fs
+        self.pp: Any = None
         self.logintime: float
         self.realClientIP: str
         self.realClientPort: int
         self.kippoIP: str
         self.clientIP: str
         self.sessionno: int
-        self.factory = None
+        self.factory: Any = None
 
         if self.fs.exists(self.user.avatar.home):
-            self.cwd = self.user.avatar.home
+            self.cwd: str = self.user.avatar.home
         else:
-            self.cwd = "/"
-        self.data = None
-        self.password_input = False
-        self.cmdstack = []
+            self.cwd: str = "/"
+        self.data: Any = None
+        self.password_input: bool = False
+        self.cmdstack: list[Any] = []
 
     def getProtoTransport(self):
         """
@@ -129,9 +129,9 @@ class HoneyPotBaseProtocol(insults.TerminalProtocol, TimeoutMixin):
         self.setTimeout(None)
         insults.TerminalProtocol.connectionLost(self, reason)
         self.terminal = None  # (this should be done by super above)
-        self.cmdstack = []
+        self.cmdstack: list[Any] = []
         self.fs = None
-        self.pp = None
+        self.pp: Any = None
         self.user = None
         self.environ = None
 

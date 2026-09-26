@@ -56,7 +56,7 @@ from cowrie.core.utils import create_endpoint_services, get_endpoints_from_secti
 from cowrie.pool_interface.handler import PoolHandler
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from cowrie.core.output import Output
 
 
 class Options(usage.Options):
@@ -87,7 +87,7 @@ class CowrieServiceMaker:
     tapname: ClassVar[str] = "cowrie"
     description: ClassVar[str] = "She sells sea shells by the sea shore."
     options = Options
-    output_plugins: list[Callable]
+    output_plugins: list[Output]
     topService: service.Service
 
     def __init__(self) -> None:

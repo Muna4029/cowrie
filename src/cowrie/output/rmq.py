@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import json
 
 from twisted.internet.address import IPv4Address, IPv6Address
@@ -30,6 +32,15 @@ class CustomJSONEncoder(json.JSONEncoder):
 
 
 class Output(cowrie.core.output.Output):
+    host: str
+    port: int
+    username: str
+    password: str
+    vhost: str
+    exchange: str
+    exchange_type: str
+    connection: Any
+    channel: Any
     """
     RabbitMQ output plugin for Cowrie using event types as routing keys,
     with reconnection logic.

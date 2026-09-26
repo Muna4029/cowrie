@@ -31,7 +31,7 @@ class HoneyPotSSHUserAuthServer(userauth.SSHUserAuthServer):
 
     bannerSent: bool = False
     user: bytes
-    _pamDeferred: defer.Deferred | None
+    _pamDeferred: defer.Deferred[None] | None
 
     def serviceStarted(self) -> None:
         self.interfaceToMethod[credentials.IUsername] = b"none"
@@ -44,7 +44,7 @@ class HoneyPotSSHUserAuthServer(userauth.SSHUserAuthServer):
             self.interfaceToMethod[credentials.IPluggableAuthenticationModulesIP] = (
                 b"keyboard-interactive"
             )
-        self._pamDeferred: defer.Deferred | None = None
+        self._pamDeferred: defer.Deferred[None] | None = None
         userauth.SSHUserAuthServer.serviceStarted(self)
 
     def sendBanner(self):
@@ -123,7 +123,7 @@ class HoneyPotSSHUserAuthServer(userauth.SSHUserAuthServer):
         )
         return self.portal.login(c, src_ip, IConchUser).addErrback(self._ebPassword)
 
-    def _pamConv(self, items: list[tuple[Any, int]]) -> defer.Deferred:
+    def _pamConv(self, items: list[tuple[Any, int]]) -> defer.Deferred[None]:
         """
         Convert a list of PAM authentication questions into a
         MSG_USERAUTH_INFO_REQUEST.  Returns a Deferred that will be called
@@ -132,7 +132,7 @@ class HoneyPotSSHUserAuthServer(userauth.SSHUserAuthServer):
         @param items: a list of 2-tuples (message, kind).  We only care about
             kinds 1 (password) and 2 (text).
         @type items: C{list}
-        @rtype: L{defer.Deferred}
+        @rtype: L{defer.Deferred[None]}
         """
         resp = []
         for message, kind in items:
@@ -164,7 +164,7 @@ class HoneyPotSSHUserAuthServer(userauth.SSHUserAuthServer):
             string response n
         """
         assert self._pamDeferred is not None
-        d: defer.Deferred = self._pamDeferred
+        d: defer.Deferred[None] = self._pamDeferred
         self._pamDeferred = None
         resp: list
 

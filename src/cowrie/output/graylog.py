@@ -4,6 +4,8 @@ Simple Graylog HTTP Graylog Extended Log Format (GELF) logger.
 
 from __future__ import annotations
 
+from typing import Any
+
 from io import BytesIO
 import json
 import time
@@ -20,6 +22,9 @@ from cowrie.core.config import CowrieConfig
 
 
 class Output(cowrie.core.output.Output):
+    url: bytes
+    agent: Any
+
     def start(self) -> None:
         self.url = CowrieConfig.get("output_graylog", "url").encode("utf8")
         contextFactory = WhitelistContextFactory()

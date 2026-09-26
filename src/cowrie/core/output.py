@@ -92,6 +92,9 @@ class Output(metaclass=abc.ABCMeta):
     cowrie output plugins. Plugins require the mandatory
     methods: stop, start and write
     """
+    debug: bool
+    agent: Any
+    db: Any
 
     def __init__(self) -> None:
         self.sessions: dict[str, str] = {}

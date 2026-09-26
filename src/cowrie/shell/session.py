@@ -14,7 +14,7 @@ from cowrie.shell import protocol
 
 
 @implementer(ISession)
-class SSHSessionForCowrieUser:
+class SSHSessionForCowrieUser:  # type: ignore[untyped-class-decorator]
     def __init__(self, avatar, reactor=None):
         """
         Construct an C{SSHSessionForCowrieUser}.

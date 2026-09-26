@@ -1,5 +1,9 @@
 # Simple Telegram Bot logger
 
+from __future__ import annotations
+
+from typing import Any
+
 import treq
 from twisted.python import log
 import cowrie.core.output
@@ -7,18 +11,20 @@ from cowrie.core.config import CowrieConfig
 
 
 class Output(cowrie.core.output.Output):
+    bot_token: str
+    chat_id: Any
     """
     telegram output
     """
 
-    def start(self):
+    def start(self) -> None:
         self.bot_token = CowrieConfig.get("output_telegram", "bot_token")
         self.chat_id = CowrieConfig.get("output_telegram", "chat_id")
 
-    def stop(self):
+    def stop(self) -> None:
         pass
 
-    def write(self, event):
+    def write(self, event: dict[str, Any]) -> None:
         for i in list(event.keys()):
             # remove twisted 15 legacy keys
             if i.startswith("log_"):
@@ -49,7 +55,7 @@ class Output(cowrie.core.output.Output):
             msgtxt += "\nUrl: " + event.get("url", "")
             self.send_message(msgtxt)
 
-    def send_message(self, message):
+    def send_message(self, message: str) -> None:
         log.msg("Telegram plugin will try to call TelegramBot")
         try:
             treq.get(

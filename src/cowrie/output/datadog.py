@@ -4,6 +4,8 @@ Simple Datadog HTTP logger.
 
 from __future__ import annotations
 
+from typing import Any
+
 import json
 import platform
 
@@ -18,6 +20,14 @@ from cowrie.core.config import CowrieConfig
 
 
 class Output(cowrie.core.output.Output):
+    url: bytes
+    api_key: bytes
+    ddsource: str
+    ddtags: str
+    service: str
+    hostname: str
+    agent: Any
+
     def start(self) -> None:
         self.url = CowrieConfig.get("output_datadog", "url").encode("utf8")
         self.api_key = CowrieConfig.get(

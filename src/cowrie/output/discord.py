@@ -4,6 +4,8 @@ Simple Discord webhook logger
 
 from __future__ import annotations
 
+from typing import Any
+
 import json
 
 from io import BytesIO
@@ -16,6 +18,11 @@ from cowrie.core.config import CowrieConfig
 
 
 class Output(cowrie.core.output.Output):
+    url: bytes
+    agent: Any
+    debug: bool
+    db: Any
+
     def start(self) -> None:
         self.url = CowrieConfig.get("output_discord", "url").encode("utf8")
         self.agent = client.Agent(reactor)

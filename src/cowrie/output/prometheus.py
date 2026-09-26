@@ -8,6 +8,8 @@ port    = 9000
 
 from __future__ import annotations
 
+from typing import Any, dict, set
+
 import socket
 import time
 
@@ -78,6 +80,10 @@ py_exceptions = Counter(
 
 
 class Output(cowrie.core.output.Output):
+    debug: bool
+    _start_times: dict[str, float]
+    _srcip_seen_5m: set[str]
+    _srcip_seen_60m: set[str]
     def start(self) -> None:
         port = CowrieConfig.getint("output_prometheus", "port", fallback=9000)
         self.debug = CowrieConfig.getboolean(

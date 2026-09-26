@@ -351,7 +351,10 @@ class PoolService:
         # replenish pool until full
         to_create = self.max_vm - self.existing_pool_size()
         for _ in range(to_create):
-            dom, snap, guest_ip = self.qemu.create_guest(self.is_ip_free)
+            result = self.qemu.create_guest(self.is_ip_free)
+            if result is None:
+                continue
+            dom, snap, guest_ip = result
 
             # create guest object
             self.guests.append(

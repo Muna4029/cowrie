@@ -1,6 +1,6 @@
 from collections.abc import Generator
 import ipaddress
-from typing import Optional, Union
+from typing import NoReturn, Optional, Union
 
 from twisted.internet.defer import inlineCallbacks, Deferred
 from twisted.names import client, dns
@@ -37,7 +37,7 @@ def is_ip_address(
 @inlineCallbacks
 def resolve_cname(
     address: str, visited: set[str]
-) -> Generator[Deferred, None, Optional[str]]:
+) -> Generator[Deferred[Optional[str]], NoReturn, Optional[str]]:
     """
     Resolve a CNAME record recursively and return the final resolved IP address (either IPv4 or IPv6)
     or None if not resolvable. `visited` is a set that tracks the domains we've already resolved to prevent cycles.
@@ -78,7 +78,7 @@ def resolve_cname(
 
 
 @inlineCallbacks
-def communication_allowed(address: str) -> Generator[Deferred, None, bool]:
+def communication_allowed(address: str) -> Generator[Deferred[bool], NoReturn, bool]:
     """
     Return True if communication to this address is allowed, False if blocked (for both IPs and DNS names).
     """

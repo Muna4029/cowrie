@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from psycopg2 import OperationalError
 from twisted.enterprise import adbapi
 from twisted.internet import defer
@@ -42,7 +44,14 @@ class Output(cowrie.core.output.Output):
     PostgreSQL output for Cowrie
     """
 
+    # Parent class attributes for type checking
+    sessions: dict
+    ips: dict
+    sensor: str
+    timeFormat: str
+
     debug: bool = False
+    db: Any
 
     def start(self):
         self.debug = CowrieConfig.getboolean("output_postgresql", "debug", fallback=False)

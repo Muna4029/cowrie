@@ -40,7 +40,7 @@ class Command_ssh(HoneyPotCommand):
     """
 
     host: str
-    callbacks: list[Callable]
+    callbacks: list[Callable[[str], None]]
 
     def valid_ip(self, address: str) -> bool:
         try:

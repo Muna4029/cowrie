@@ -20,8 +20,8 @@ class Command_find(HoneyPotCommand):
 
     def start(self) -> None:
         self.maxdepth: int = 20
-        self.name_pattern = None
-        self.type_filter = None
+        self.name_pattern: str | None = None
+        self.type_filter: str | None = None
 
         self.start_path = self.protocol.cwd
 

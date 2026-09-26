@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable
 
 from twisted.conch.ssh import channel, common, connection, transport, userauth
 from twisted.internet import defer, protocol
@@ -10,24 +10,31 @@ if TYPE_CHECKING:
 
 
 class PasswordAuth(userauth.SSHUserAuthClient):
-    def __init__(self, user, password, conn):
+    def __init__(self, user: str, password: str, conn: Any) -> None:
         super().__init__(user, conn)
         self.password = password
 
-    def getPassword(self, prompt=None):
+    def getPassword(self, prompt: str | None = None) -> defer.Deferred:
         return defer.succeed(self.password)
 
 
 class CommandChannel(channel.SSHChannel):
     name = b"session"
 
-    def __init__(self, command, done_deferred, callback, *args, **kwargs):
+    def __init__(
+        self,
+        command: bytes,
+        done_deferred: defer.Deferred,
+        callback: Callable[[bytes], Any] | None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         super().__init__(*args, **kwargs)
-        self.command = command
-        self.done_deferred = done_deferred
-        self.callback = callback
+        self.command: bytes = command
+        self.done_deferred: defer.Deferred = done_deferred
+        self.callback: Callable[[bytes], Any] | None = callback
 
-        self.data = b""
+        self.data: bytes = b""
 
     def channelOpen(self, specificData: bytes) -> None:
         assert self.conn is not None
@@ -49,11 +56,16 @@ class CommandChannel(channel.SSHChannel):
 
 
 class ClientConnection(connection.SSHConnection):
-    def __init__(self, cmd, done_deferred, callback):
+    def __init__(
+        self,
+        cmd: bytes,
+        done_deferred: defer.Deferred,
+        callback: Callable[[bytes], Any] | None,
+    ) -> None:
         super().__init__()
-        self.command = cmd
-        self.done_deferred = done_deferred
-        self.callback = callback
+        self.command: bytes = cmd
+        self.done_deferred: defer.Deferred = done_deferred
+        self.callback: Callable[[bytes], Any] | None = callback
 
     def serviceStarted(self) -> None:
         self.openChannel(
@@ -62,14 +74,21 @@ class ClientConnection(connection.SSHConnection):
 
 
 class ClientCommandTransport(transport.SSHClientTransport):
-    def __init__(self, username, password, command, done_deferred, callback):
-        self.username = username
-        self.password = password
-        self.command = command
-        self.done_deferred = done_deferred
-        self.callback = callback
+    def __init__(
+        self,
+        username: str,
+        password: str,
+        command: bytes,
+        done_deferred: defer.Deferred,
+        callback: Callable[[bytes], Any] | None,
+    ) -> None:
+        self.username: str = username
+        self.password: str = password
+        self.command: bytes = command
+        self.done_deferred: defer.Deferred = done_deferred
+        self.callback: Callable[[bytes], Any] | None = callback
 
-    def verifyHostKey(self, hostKey, fingerprint):
+    def verifyHostKey(self, hostKey: Any, fingerprint: str) -> defer.Deferred:
         return defer.succeed(True)
 
     def connectionSecure(self) -> None:
@@ -83,12 +102,19 @@ class ClientCommandTransport(transport.SSHClientTransport):
 
 
 class ClientCommandFactory(protocol.ClientFactory):
-    def __init__(self, username, password, command, done_deferred, callback):
-        self.username = username
-        self.password = password
-        self.command = command
-        self.done_deferred = done_deferred
-        self.callback = callback
+    def __init__(
+        self,
+        username: str,
+        password: str,
+        command: bytes,
+        done_deferred: defer.Deferred,
+        callback: Callable[[bytes], Any] | None,
+    ) -> None:
+        self.username: str = username
+        self.password: str = password
+        self.command: bytes = command
+        self.done_deferred: defer.Deferred = done_deferred
+        self.callback: Callable[[bytes], Any] | None = callback
 
     def buildProtocol(self, addr: IAddress) -> ClientCommandTransport:
         return ClientCommandTransport(
@@ -100,8 +126,15 @@ class ClientCommandFactory(protocol.ClientFactory):
         )
 
 
-def execute_ssh(host, port, username, password, command, callback=None):
-    done_deferred = defer.Deferred()
+def execute_ssh(
+    host: str,
+    port: int,
+    username: str,
+    password: str,
+    command: bytes,
+    callback: Callable[[bytes], Any] | None = None,
+) -> defer.Deferred:
+    done_deferred: defer.Deferred = defer.Deferred()
 
     factory = ClientCommandFactory(username, password, command, done_deferred, callback)
     reactor.connectTCP(host, port, factory)

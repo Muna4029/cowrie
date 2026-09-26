@@ -97,7 +97,7 @@ class HoneyPotTelnetSession(TelnetBootstrapProtocol):
 # Taken and adapted from
 # https://github.com/twisted/twisted/blob/26ad16ab41db5f0f6d2526a891e81bbd3e260247/twisted/conch/ssh/session.py#L186
 @implementer(interfaces.ITransport)
-class TelnetSessionProcessProtocol(protocol.ProcessProtocol):
+class TelnetSessionProcessProtocol(protocol.ProcessProtocol):  # type: ignore[untyped-class-decorator]
     """
     I am both an L{IProcessProtocol} and an L{ITransport}.
     I am a transport to the remote endpoint and a process protocol to the

@@ -115,7 +115,7 @@ class LibvirtBackendService:
 
         raise LibvirtError()
 
-    def create_guest(self, ip_tester):
+    def create_guest(self, ip_tester) -> tuple[object, str, str] | None:
         """
         Returns an unready domain and its snapshot information.
 

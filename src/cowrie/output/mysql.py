@@ -4,6 +4,8 @@ MySQL output connector. Writes audit logs to MySQL database
 
 from __future__ import annotations
 
+from typing import Any
+
 from twisted.enterprise import adbapi
 from twisted.internet import defer
 from twisted.python import log
@@ -57,8 +59,14 @@ class Output(cowrie.core.output.Output):
     """
     MySQL output
     """
+    # Parent class attributes for type checking
+    sessions: dict
+    ips: dict
+    sensor: str
+    timeFormat: str
 
     debug: bool = False
+    db: Any
 
     def start(self):
         self.debug = CowrieConfig.getboolean("output_mysql", "debug", fallback=False)

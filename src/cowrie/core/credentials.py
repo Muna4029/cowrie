@@ -69,7 +69,7 @@ class IPluggableAuthenticationModulesIP(ICredentials):
 
 
 @implementer(IPluggableAuthenticationModulesIP)
-class PluggableAuthenticationModulesIP:
+class PluggableAuthenticationModulesIP:  # type: ignore[untyped-class-decorator]
     """
     Twisted removed IPAM in 15, adding in Cowrie now
     """

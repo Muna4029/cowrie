@@ -3,7 +3,12 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from cowrie.shell import fs
+
+if TYPE_CHECKING:
+    from cowrie.shell.fs import HoneyPotFilesystem
 
 
 class FakeServer:
@@ -13,7 +18,12 @@ class FakeServer:
     @ivar fs File System for cowrie to use
     """
 
-    def __init__(self):
+    arch: str
+    hostname: str
+    fs: "HoneyPotFilesystem"
+    process: None
+
+    def __init__(self) -> None:
         self.arch = "linux-x64-lsb"
         self.hostname = "unitTest"
 
@@ -31,7 +41,16 @@ class FakeAvatar:
     @var uid for user
     """
 
-    def __init__(self, server):
+    avatar: "FakeAvatar"
+    server: "FakeServer"
+    uid: int
+    gid: int
+    home: str
+    username: str
+    environ: dict[str, str]
+    windowSize: list[int]
+
+    def __init__(self, server: "FakeServer") -> None:
         self.avatar = self
         self.server = server
 

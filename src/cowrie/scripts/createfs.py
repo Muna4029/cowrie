@@ -60,7 +60,7 @@ def checkblacklist(ftxt):
     return False
 
 
-def recurse(localroot, root, tree, maxdepth=100):
+def recurse(localroot: str, root: str, tree: list, maxdepth: int = 100) -> None:
     if maxdepth == 0:
         return
 

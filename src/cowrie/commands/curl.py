@@ -198,7 +198,7 @@ class Command_curl(HoneyPotCommand):
     port: int
 
     @inlineCallbacks
-    def start(self):
+    def start(self) -> None:
         try:
             optlist, args = getopt.getopt(
                 self.args, "sho:OI", ["help", "manual", "silent", "head"]
