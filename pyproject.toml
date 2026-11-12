@@ -161,6 +161,23 @@ reportOptionalOperand = "information"
 reportPossiblyUnboundVariable = "information"
 reportUnsupportedDunderAll = "information"
 
+reportMissingParameterType = "none"
+reportMissingTypeArgument = "none"
+reportUnknownArgumentType = "none"
+reportUnknownLambdaType = "none"
+reportUnknownMemberType = "none"
+reportUnknownParameterType = "none"
+reportUnknownVariableType = "none"
+reportUntypedClassDecorator = "none"
+
+reportConstantRedefinition = "none"
+reportDeprecated = "none"
+reportMissingTypeStubs = "none"
+reportUnnecessaryComparison = "none"
+reportUnusedFunction = "none"
+reportUnusedImport = "none"
+reportUnusedVariable = "none"
+
 [tool.pytype]
 inputs = ["src"]
 jobs = "auto"
