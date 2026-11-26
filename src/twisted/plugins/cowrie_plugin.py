@@ -138,18 +138,10 @@ Makes a Cowrie SSH/Telnet honeypot.
 
         log.msg("Python Version {}".format(str(sys.version).replace("\n", "")))
         log.msg(
-            "Twisted Version {}.{}.{}".format(
-                __twisted_version__.major,
-                __twisted_version__.minor,
-                __twisted_version__.micro,
-            )
+            f"Twisted Version {__twisted_version__.major}.{__twisted_version__.minor}.{__twisted_version__.micro}"
         )
         log.msg(
-            "Cowrie Version {}.{}.{}".format(
-                __cowrie_version__.major,
-                __cowrie_version__.minor,
-                __cowrie_version__.micro,
-            )
+            f"Cowrie Version {__cowrie_version__.major}.{__cowrie_version__.minor}.{__cowrie_version__.micro}"
         )
 
         # check configurations

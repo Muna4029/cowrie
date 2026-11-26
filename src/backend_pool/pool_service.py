@@ -13,7 +13,7 @@ involve requesting and freeing VMs. All operations on shared data
 in the producer-consumer are guarded by a lock, since there may be
 concurrent requests. The lock protects the _guests_ list, which
 contains references for each VM backend (in our case libvirt/QEMU
-instances).  """
+instances)."""
 
 # Copyright (c) 2019 Guilherme Borges <guilhermerosasborges@gmail.com>
 # See the COPYRIGHT file for more information
@@ -45,17 +45,23 @@ POOL_STATE_DESTROYED = "destroyed"
 
 @dataclass
 class Guest:
-    """Class for keeping track of QEMU guests."""
+    """Class for keeping track of QEMU guests.
+
+    Types are kept generic to match the runtime usage where guests are
+    represented as dicts and fields may be None or mutable containers
+    (e.g. client_ips as a set). Using generic types avoids strict
+    mismatches with how the pool constructs guest data at runtime.
+    """
 
     id: int
-    client_ips: list[str]
-    state: str
-    prev_state: str
-    start_timestamp: float
-    domain: str
-    guest_ip: str
-    name: str
-    snapshot: str
+    client_ips: set
+    state: object
+    prev_state: object
+    start_timestamp: object
+    domain: object
+    guest_ip: object
+    name: object
+    snapshot: object
 
 
 class NoAvailableVMs(Exception):
@@ -158,7 +164,6 @@ class PoolService:
     def stop_pool(self):
         # lazy import to avoid exception if not using the backend_pool
         # and libvirt not installed (#1185)
-        import libvirt
 
         log.msg(eventid="cowrie.backend_pool.service", format="Trying pool clean stop")
 
@@ -174,7 +179,7 @@ class PoolService:
         self.qemu.destroy_all_cowrie()
 
         # close any NAT sockets
-        if not self.local_pool and self.use_nat or self.pool_only:
+        if (not self.local_pool and self.use_nat) or self.pool_only:
             log.msg(
                 eventid="cowrie.backend_pool.service", format="Free all NAT bindings"
             )
@@ -182,20 +187,23 @@ class PoolService:
 
         try:
             self.qemu.stop_backend()
-        except libvirt.libvirtError:
-            print("Not connected to QEMU")  # noqa: T201
+        except Exception:
+            log.msg(
+                eventid="cowrie.backend_pool.service", format="Not connected to QEMU"
+            )
 
     def shutdown_pool(self):
         # lazy import to avoid exception if not using the backend_pool
         # and libvirt not installed (#1185)
-        import libvirt
 
         self.stop_pool()
 
         try:
             self.qemu.shutdown_backend()
-        except libvirt.libvirtError:
-            print("Not connected to QEMU")  # noqa: T201
+        except Exception:
+            log.msg(
+                eventid="cowrie.backend_pool.service", format="Not connected to QEMU"
+            )
 
     def restart_pool(self):
         log.msg(
